@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import imghdr
 from random import seed, shuffle
+from math import log10, sqrt
 
 # untuk mengubah data-data menjadi file Binary 8bit
 def changeToBinary(data):
@@ -16,13 +17,12 @@ def changeToBinary(data):
         raise TypeError("input type not support")
 
 #memasukan Text kedalam file
-def hiding_Message(image,message,pilihan):
+def hiding_Message(image,message,pilihan,key):
     n_bytes = image.shape[0] * image.shape[1]
     Text = ""
-    print(type(pilihan))
-    if pilihan == "1":
+    if pilihan == 1:
         Text += "*"
-    elif pilihan == "2":
+    elif pilihan == 2:
         Text += "@"
     if (len(message) > n_bytes):
         print("tidak bisa menyisipkan text karena panjang text melebihi kapasitas")
@@ -32,7 +32,7 @@ def hiding_Message(image,message,pilihan):
     data_index = 0
     message_binary = changeToBinary(Text)
     data_len = len(message_binary)
-    if pilihan == "1":
+    if pilihan == 1:
         for i in range(len(image)):
             for pixel in image[i]:
                 r,g,b = changeToBinary(pixel)
@@ -47,9 +47,9 @@ def hiding_Message(image,message,pilihan):
                     data_index += 1
                 if data_index >= data_len:
                     break
-    if pilihan == "2":
+    if pilihan == 2:
         random = [0]
-        place_LSB = PRNG(image)
+        place_LSB = PRNG(image,key)
         shuffle(place_LSB)
         new_random = random+place_LSB 
         for i in new_random:
@@ -69,10 +69,11 @@ def hiding_Message(image,message,pilihan):
     return image
 
 #membuat file baru yang telah disisipkan text    
-def make_New_Image(image, message,filepath,pilihan):
-    new_filename = input("masukan nam file yang baru")
-    new_image = hiding_Message(image,message,pilihan)
+def make_New_Image(image, message,filepath,pilihan,new_filename,key):
+    new_image = hiding_Message(image,message,pilihan,key)
+    value = PSNR(image,new_image)
     cv2.imwrite(str(new_filename)+"."+imghdr.what(filepath),new_image)
+    return value
 
 #mendapatkan code image apakah sequencial atau acak
 def get_code_Image(image):
@@ -89,7 +90,7 @@ def get_code_Image(image):
     return decoded_tetx
 
 #menampilkan tulisan yang disisipkan oleh gambar
-def decode_Image(image):
+def decode_Image(image,key):
     code = get_code_Image(image)
     binary_data =""
     if code == "*":
@@ -101,7 +102,7 @@ def decode_Image(image):
                 binary_data += b[-1]
     elif code == "@":
         random = [0]
-        place_LSB = PRNG(image)
+        place_LSB = PRNG(image,key)
         shuffle(place_LSB)
         new_random = random+place_LSB 
         for i in new_random:
@@ -120,32 +121,17 @@ def decode_Image(image):
     return decoded_tetx[1:-1]
 
 #untuk mengacak
-def PRNG(image):
-    key = input("Key: ")
+def PRNG(image,key):
     seed(key)
     sequence = [i for i in range(1,len(image))]
     return sequence
 
-#main menu
-print("pilih menu steganograpy 1. encode 2.decode")
-menu = input("Masukan pilihan menu: ")
-if(menu == "1"):
-    print("pilih menu peletakan LSB 1. Sequencial 2.Acak")
-    pilihan = input("Masukan pilihan menu: ")
-    filepath = input("masukan path dan nama gambar: ")
-    message = input("Masukan text: ")
-    image = cv2.imread(filepath)
-    if(imghdr.what(filepath) != "png" and imghdr.what(filepath) != "BMP" ):
-        print("format file tidak di dukung")
-    else:
-        make_New_Image(image,message,filepath,pilihan)
-elif(menu == "2"):
-    filepath = input("masukan path dan nama gambar: ")
-    image = cv2.imread(filepath)
-    if(imghdr.what(filepath) != "png" and imghdr.what(filepath) != "BMP" ):
-        print("format file tidak di dukung")
-    else:
-        Text = decode_Image(image)
-        print(Text)
-else:
-    print("Menu tersebut tidak tersedia")
+#hitung PSNR
+def PSNR(original, compressed):
+    mse = np.mean((original - compressed) ** 2)
+    if(mse == 0):
+        return 100
+    max_pixel = 255.0
+    psnr = 20 * log10(max_pixel / sqrt(mse))
+    return psnr
+
