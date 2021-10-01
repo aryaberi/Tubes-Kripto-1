@@ -22,17 +22,28 @@ def hiding_Message(image,message,pilihan,key):
     Text = ""
     if pilihan == 1:
         Text += "*"
+        Text += message
+        Text += "#"
     elif pilihan == 2:
         Text += "@"
+        Text += message
+        Text += "#"
+    elif pilihan == 3:
+        Text += "$"
+        Text += encrib(message)
+        Text += "#"
+    elif pilihan == 4:
+        Text += "%"
+        Text += encrib(message)
+        Text += "#"
     if (len(message) > n_bytes):
         print("tidak bisa menyisipkan text karena panjang text melebihi kapasitas")
     
-    Text += message
-    Text += "#"
+    
     data_index = 0
     message_binary = changeToBinary(Text)
     data_len = len(message_binary)
-    if pilihan == 1:
+    if pilihan == 1 or pilihan == 3:
         for i in range(len(image)):
             for pixel in image[i]:
                 r,g,b = changeToBinary(pixel)
@@ -47,7 +58,7 @@ def hiding_Message(image,message,pilihan,key):
                     data_index += 1
                 if data_index >= data_len:
                     break
-    if pilihan == 2:
+    if pilihan == 2 or pilihan == 4:
         random = [0]
         place_LSB = PRNG(image,key)
         shuffle(place_LSB)
@@ -93,14 +104,14 @@ def get_code_Image(image):
 def decode_Image(image,key):
     code = get_code_Image(image)
     binary_data =""
-    if code == "*":
+    if code == "*" or code == "$":
         for value in image:
             for pixel in value:
                 r,g,b = changeToBinary(pixel)
                 binary_data += r[-1]
                 binary_data += g[-1]
                 binary_data += b[-1]
-    elif code == "@":
+    elif code == "@" or code == "%":
         random = [0]
         place_LSB = PRNG(image,key)
         shuffle(place_LSB)
@@ -118,7 +129,13 @@ def decode_Image(image,key):
         decoded_tetx += chr(int(byte,2))
         if (decoded_tetx[-1:] == "#"):
             break
-    return decoded_tetx[1:-1]
+    if(code == "$" or code == "%"):
+        Text = ""
+        Text += decoded_tetx[1:-1]
+        plain_text = decrib(Text)
+        return plain_text
+    else:
+        return decoded_tetx[1:-1]
 
 #untuk mengacak
 def PRNG(image,key):
@@ -135,3 +152,8 @@ def PSNR(original, compressed):
     psnr = 20 * log10(max_pixel / sqrt(mse))
     return psnr
 
+def encrib(message):
+    return message
+    
+def decrib(message):
+    return message
