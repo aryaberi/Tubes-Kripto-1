@@ -56,6 +56,8 @@ def pilihFile():
     path_content = main.filename
     if(imghdr.what(main.filename)=="png"):
         image_content = compress(image)
+        print(image_content.shape)
+        print(image.shape)
     else:
         image_content = image
 
