@@ -133,12 +133,7 @@ def decode(image,key,n):
 def decode_audio(metode,path,key,n):
         global plain,Label1
         n = int(n)
-        if metode== 1 or metode == 3:
-            isSeq = True
-        else:
-            isSeq = False
-        value = emitMsg(path,isSeq)
-        print(value)
+        value = emitMsg(path) 
         if metode == 3 or metode ==4:
             text = decr(value,key,n)
         else:
@@ -155,7 +150,7 @@ def decode_audio(metode,path,key,n):
 button1 = Button(main, text="Run Citra", command=lambda : encode(m.get(),image_content,path_content,entry.get(),entry2.get(),entry3.get(),entry5.get()))
 button3 = Button(main, text="Run Audio", command=lambda : encode_audio(m.get(),path_content,entry.get(),entry2.get(),entry5.get()))
 button2 = Button(main, text="Run Citra", command=lambda : decode(image_content,entry4.get(),entry6.get()))
-button4 = Button(main, text="Run Audio", command=lambda : decode_audio(m.get(),path_content,entry2.get(),entry6.get()))
+button4 = Button(main, text="Run Audio", command=lambda : decode_audio(m.get(),path_content,entry4.get(),entry6.get()))
 
 judul = Label(main,text="Sisipkan Pesan")
 judul.pack

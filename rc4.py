@@ -25,7 +25,7 @@ def encr(msg,key,n):
     plain = []
     for i in range(len(msg)):
         plain.append(ord(msg[i]))
-    print('plain: ',plain)
+    # print('plain: ',plain)
 
     # permutasi
     j = 0
@@ -87,7 +87,7 @@ def decr(msg,key,n):
     plain = []
     for i in range(len(msg)):
         plain.append(ord(msg[i]))
-    print('plain: ',plain)
+    # print('plain: ',plain)
 
     # permutasi
     j = 0

@@ -64,10 +64,5 @@ def emitMsg(audioPath):
     song.close()
     return decoded
 
-<<<<<<< HEAD
-# insertMsg('Selamat Siang, perkenalkan nama saya Angga halo ASSALAMUALAIKUM?', "sample.wav", False)
-print(emitMsg("audio_embedded.wav", True))
-=======
 # insertMsg('Selamat Siang, perkenalkan nama saya Angga halo ASSALAMUALAIKUM?', "sample.wav", True)
 # print(emitMsg("audio_embedded.wav"))
->>>>>>> 9298b24daa2534774049030ae0e9e69a77e20cb9
