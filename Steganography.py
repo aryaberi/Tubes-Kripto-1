@@ -4,6 +4,7 @@ import imghdr
 from random import seed, shuffle
 from math import log10, sqrt
 from rc4 import encr,decr
+from compressor import compres
 
 # untuk mengubah data-data menjadi file Binary 8bit
 def changeToBinary(data):
@@ -84,7 +85,14 @@ def hiding_Message(image,message,pilihan,key,n):
 
 #membuat file baru yang telah disisipkan text    
 def make_New_Image(image, message,filepath,pilihan,new_filename,key,n):
-    new_image = hiding_Message(image,message,pilihan,key,n)
+    print(imghdr.what(filepath))
+    if(imghdr.what(filepath)=="png"):
+        print("masuk sini")
+        input = compres(filepath)
+        print(input.shape)
+    else:
+        input = image
+    new_image = hiding_Message(input,message,pilihan,key,n)
     value = PSNR(image,new_image)
     cv2.imwrite(str(new_filename)+"."+imghdr.what(filepath),new_image)
     return value
