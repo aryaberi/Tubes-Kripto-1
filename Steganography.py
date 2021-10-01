@@ -1,9 +1,9 @@
-from typing import Text
 import numpy as np
 import cv2
 import imghdr
 from random import seed, shuffle
 from math import log10, sqrt
+from rc4 import encr,decr
 
 # untuk mengubah data-data menjadi file Binary 8bit
 def changeToBinary(data):
@@ -17,8 +17,9 @@ def changeToBinary(data):
         raise TypeError("input type not support")
 
 #memasukan Text kedalam file
-def hiding_Message(image,message,pilihan,key):
+def hiding_Message(image,message,pilihan,key,n):
     n_bytes = image.shape[0] * image.shape[1]
+    # print(n,type(n))
     Text = ""
     if pilihan == 1:
         Text += "*"
@@ -30,19 +31,21 @@ def hiding_Message(image,message,pilihan,key):
         Text += "#"
     elif pilihan == 3:
         Text += "$"
-        Text += encrib(message)
+        Text += encr(message,key,n)
         Text += "#"
     elif pilihan == 4:
         Text += "%"
-        Text += encrib(message)
+        Text += encr(message,key,n)
         Text += "#"
     if (len(message) > n_bytes):
         print("tidak bisa menyisipkan text karena panjang text melebihi kapasitas")
     
     
     data_index = 0
+    # print(Text)
     message_binary = changeToBinary(Text)
     data_len = len(message_binary)
+    # print(data_len,message_binary)
     if pilihan == 1 or pilihan == 3:
         for i in range(len(image)):
             for pixel in image[i]:
@@ -80,8 +83,8 @@ def hiding_Message(image,message,pilihan,key):
     return image
 
 #membuat file baru yang telah disisipkan text    
-def make_New_Image(image, message,filepath,pilihan,new_filename,key):
-    new_image = hiding_Message(image,message,pilihan,key)
+def make_New_Image(image, message,filepath,pilihan,new_filename,key,n):
+    new_image = hiding_Message(image,message,pilihan,key,n)
     value = PSNR(image,new_image)
     cv2.imwrite(str(new_filename)+"."+imghdr.what(filepath),new_image)
     return value
@@ -101,7 +104,7 @@ def get_code_Image(image):
     return decoded_tetx
 
 #menampilkan tulisan yang disisipkan oleh gambar
-def decode_Image(image,key):
+def decode_Image(image,key,n):
     code = get_code_Image(image)
     binary_data =""
     if code == "*" or code == "$":
@@ -131,8 +134,10 @@ def decode_Image(image,key):
             break
     if(code == "$" or code == "%"):
         Text = ""
+        # print(decoded_tetx[1:-1])
         Text += decoded_tetx[1:-1]
-        plain_text = decrib(Text)
+        # print(Text)
+        plain_text = decr(Text,key,n)
         return plain_text
     else:
         return decoded_tetx[1:-1]
@@ -152,8 +157,3 @@ def PSNR(original, compressed):
     psnr = 20 * log10(max_pixel / sqrt(mse))
     return psnr
 
-def encrib(message):
-    return message
-    
-def decrib(message):
-    return message

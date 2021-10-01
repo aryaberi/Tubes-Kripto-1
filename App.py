@@ -1,7 +1,8 @@
-from Steganography import encrib, make_New_Image,decode_Image
+from Steganography import make_New_Image,decode_Image
 from tkinter import *
 from tkinter import filedialog
 import cv2
+from rc4 import encr
 
 main = Tk()
 main.geometry('500x800+100+200')
@@ -28,9 +29,15 @@ entry2 = Entry(main,width=30)
 label3 = Label(main, text = "Masukan nama file yang baru")
 entry3 = Entry(main,width=30)
 
+label5 = Label(main, text = "Masukan nilai n antara 1-256")
+entry5 = Entry(main,width=30)
+
 
 label4 = Label(main, text = "Masukan Key")
 entry4 = Entry(main,width=30)
+
+label6 = Label(main, text = "Masukan nilai n antara 1-256")
+entry6 = Entry(main,width=30)
 
 def pilihFile():
     global fileLabel,path_content,image_content 
@@ -57,9 +64,10 @@ def pilihFile2():
 openFile = Button(main, text="Pilih File", command=pilihFile)
 openFile2 = Button(main, text="Pilih File", command=pilihFile2)
 
-def encode(metode,image,filepath,message,key, nama):
+def encode(metode,image,filepath,message,key, nama,n):
     global plain,Label1,encrip,Label2
-    Value = make_New_Image(image,message,filepath,metode,nama,key)
+    n = int(n)
+    Value = make_New_Image(image,message,filepath,metode,nama,key,n)
     plain.pack_forget()
     Label1.pack_forget()
     Label1 = Label(main, text = "Penyisipan text berhasil, berikut nilai PNSR nya: ")
@@ -69,7 +77,7 @@ def encode(metode,image,filepath,message,key, nama):
     plain.pack()
     plain.place(x=500,y=20)
     if(metode == 3 or metode == 4):
-        text = encrib(message)
+        text = encr(message,key,n)
         encrip.pack_forget()
         Label2.pack_forget()
         Label1 = Label(main, text = "Text telah di encrypht menjadi: ")
@@ -80,9 +88,10 @@ def encode(metode,image,filepath,message,key, nama):
         plain.place(x=400,y=40)
 
 
-def decode(image,key):
+def decode(image,key,n):
         global plain,Label1
-        Text = decode_Image(image,key)
+        n = int(n)
+        Text = decode_Image(image,key,n)
         plain.pack_forget()
         Label1.pack_forget()
         Label1 = Label(main, text = "Ini Text nya: ")
@@ -92,8 +101,8 @@ def decode(image,key):
         plain.pack()
         plain.place(x=300,y=270)
     
-button1 = Button(main, text="Run", command=lambda : encode(m.get(),image_content,path_content,entry.get(),entry2.get(),entry3.get()))
-button2 = Button(main, text="Run", command=lambda : decode(image_content,entry4.get()))
+button1 = Button(main, text="Run", command=lambda : encode(m.get(),image_content,path_content,entry.get(),entry2.get(),entry3.get(),entry5.get()))
+button2 = Button(main, text="Run", command=lambda : decode(image_content,entry4.get(),entry6.get()))
 
 judul = Label(main,text="Sisipkan Pesan")
 judul.pack
@@ -120,21 +129,29 @@ entry2.place(x=40,y=140)
 label3.pack()
 label3.place(x=40,y=160)
 entry3.pack(ipady=5)
-entry3.place(x=40,y=190)
+entry3.place(x=40,y=180)
+label5.pack()
+label5.place(x=40,y=200)
+entry5.pack(ipady=5)
+entry5.place(x=40,y=220)
 openFile.pack()
-openFile.place(x=40,y=210)
+openFile.place(x=40,y=240)
 button1.pack()
-button1.place(x=40,y=240)
+button1.place(x=40,y=270)
 judul2 = Label(main,text="Tampilkan Pesan")
 judul2.pack
-judul2.place(x=40,y=280)
+judul2.place(x=40,y=310)
 label4.pack()
-label4.place(x=40,y=300)
+label4.place(x=40,y=330)
 entry4.pack(ipady=5)
-entry4.place(x=40,y=320)
+entry4.place(x=40,y=350)
+label6.pack()
+label6.place(x=40,y=370)
+entry6.pack(ipady=5)
+entry6.place(x=40,y=390)
 openFile2.pack()
-openFile2.place(x=40,y=340)
+openFile2.place(x=40,y=410)
 button2.pack()
-button2.place(x=40,y=370)
+button2.place(x=40,y=440)
 
 main.mainloop()

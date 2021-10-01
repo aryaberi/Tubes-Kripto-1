@@ -1,12 +1,15 @@
 # msg = plaintext, key = kunci, n = mode byte (0 - 256)
 
-def encr(msg,key,n):
+from numpy import string_
 
+
+def encr(msg,key,n):
+    # print(n)
     # Initiate S
     S = []
     for i in range(2**n):
         S.append(i)
-    print('S: ',S)
+    # print('S: ',S)
 
     # handle key
     k = list(key) 
@@ -16,7 +19,7 @@ def encr(msg,key,n):
     
     for i in range(len(k)):
         k[i] = ord(k[i])
-    print('k: ',k)
+    # print('k: ',k)
     
     # plain teks but array decimal
     plain = []
@@ -30,8 +33,8 @@ def encr(msg,key,n):
         j = (j + S[i] + k[i]) % len(S)
         # print('j: ',j)
         S[i], S[j] = S[j], S[i]
-        print('iterasi ke -',i)
-        print('S : ',S)
+        # print('iterasi ke -',i)
+        # print('S : ',S)
 
     # pseudorandom bytestream / keystream
     keystream = []
@@ -41,21 +44,26 @@ def encr(msg,key,n):
         i = (i + 1) % len(S)
         j = (j + S[i]) % len(S)
         S[i], S[j] = S[j], S[i]
-        print(S)
+        # print(S)
         t = (S[i] + S[j]) % len(S)
         keystream.append(S[t])
-    print('keystream: ',keystream)
+    # print('keystream: ',keystream)
 
     # XOR
     cipher = []
     for i in range(len(plain)):
         cipher.append(keystream[i] ^ plain[i])
-    print(cipher)
+    # print(cipher)
 
     # convert to ascii
     for i in range(len(cipher)):
         cipher[i] = chr(cipher[i])
     print(cipher)
+    
+    string = ""
+    for i in range(len(cipher)):
+        string += cipher[i]
+    return string
 
 # enkripsi dan dekripsi sama karena rc4 itu symmetric
 def decr(msg,key,n):
@@ -63,7 +71,7 @@ def decr(msg,key,n):
     S = []
     for i in range(2**n):
         S.append(i)
-    print('S: ',S)
+    # print('S: ',S)
 
     # handle key
     k = list(key) 
@@ -73,7 +81,7 @@ def decr(msg,key,n):
     
     for i in range(len(k)):
         k[i] = ord(k[i])
-    print('k: ',k)
+    # print('k: ',k)
     
     # plain teks but array decimal
     plain = []
@@ -87,8 +95,8 @@ def decr(msg,key,n):
         j = (j + S[i] + k[i]) % len(S)
         # print('j: ',j)
         S[i], S[j] = S[j], S[i]
-        print('iterasi ke -',i)
-        print('S : ',S)
+        # print('iterasi ke -',i)
+        # print('S : ',S)
 
     # pseudorandom bytestream / keystream
     keystream = []
@@ -98,21 +106,25 @@ def decr(msg,key,n):
         i = (i + 1) % len(S)
         j = (j + S[i]) % len(S)
         S[i], S[j] = S[j], S[i]
-        print(S)
+        # print(S)
         t = (S[i] + S[j]) % len(S)
         keystream.append(S[t])
-    print('keystream: ',keystream)
+    # print('keystream: ',keystream)
 
     # XOR
     result = []
     for i in range(len(plain)):
         result.append(keystream[i] ^ plain[i])
-    print(result)
+    # print(result)
 
     # convert to ascii
     for i in range(len(result)):
         result[i] = chr(result[i])
     print(result)
+    string = ""
+    for i in range(len(result)):
+        string += result[i]
+    return result
 
 def main():
     msg = input('Masukkan pesan plain teks: ')
