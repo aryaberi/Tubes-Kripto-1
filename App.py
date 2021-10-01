@@ -1,4 +1,4 @@
-from Steganography import encrib, make_New_Image,decode_Image
+from imagestegano import encrib, make_New_Image,decode_Image
 from tkinter import *
 from tkinter import filedialog
 import cv2
