@@ -21,6 +21,7 @@ except ImportError:
 
 import start
 import rc4_gui
+import stegano_gui
 
 def init(top, gui, *args, **kwargs):
     global w, top_level, root
@@ -46,8 +47,8 @@ def openDecRC4Window():
 
 def openImageStegano():
     destroy_window()
-    # OPEN STEGANO
+    stegano_gui.steganoApp()
 
 def openAudioStegano():
     destroy_window()
-    # OPEN STEGANO
+    stegano_gui.steganoApp()

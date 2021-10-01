@@ -6,7 +6,7 @@ from tkinter import filedialog
 import cv2
 from rc4 import encr
 import imghdr
-from compressor import compres
+from compressor import compress
 
 main = Tk()
 main.geometry('500x800+100+200')
@@ -47,15 +47,17 @@ def pilihFile():
     global fileLabel,path_content,image_content 
     main.filename = filedialog.askopenfilename(initialdir="/c",title="Pilih file")
     print(imghdr.what(main.filename))
-    if(imghdr.what(main.filename)=="png"):
-    else: 
-        image = cv2.imread(main.filename)
+     
+    image = cv2.imread(main.filename)
     fileLabel=Label(main,text=main.filename)
     fileLabel.pack_forget()
     fileLabel.pack()
     fileLabel.place(x=220)
     path_content = main.filename
-    image_content = image
+    if(imghdr.what(main.filename)=="png"):
+        image_content = compress(image)
+    else:
+        image_content = image
 
 def pilihFile2():
     global fileLabel,path_content,image_content 
