@@ -167,7 +167,7 @@ def steganoApp():
     button1 = Button(main, text="Run Citra", command=lambda : encode(m.get(),image_content,path_content,entry.get(),entry2.get(),entry3.get(),entry5.get()))
     button3 = Button(main, text="Run Audio", command=lambda : encode_audio(m.get(),path_content,entry.get(),entry2.get(),entry5.get()))
     button2 = Button(main, text="Run Citra", command=lambda : decode(image_content,entry4.get(),entry6.get()))
-    button4 = Button(main, text="Run Audio", command=lambda : decode_audio(m.get(),path_content,entry4.get(),entry6.get()))
+    button4 = Button(main, text="Run Audio", command=lambda : decode_audio(path_content,entry4.get(),entry6.get()))
 
     judul = Label(main,text="Sisipkan Pesan")
     judul.pack
