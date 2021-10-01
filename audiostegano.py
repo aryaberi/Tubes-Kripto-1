@@ -61,4 +61,4 @@ def emitMsg(audioPath, isSeq):
     return decoded
 
 # insertMsg('Selamat Siang, perkenalkan nama saya Angga halo ASSALAMUALAIKUM?', "sample.wav", False)
-# print(emitMsg("audio_embedded.wav", False))
+print(emitMsg("audio_embedded.wav", True))

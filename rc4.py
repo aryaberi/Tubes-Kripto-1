@@ -126,12 +126,12 @@ def decr(msg,key,n):
         string += result[i]
     return result
 
-def main():
-    msg = input('Masukkan pesan plain teks: ')
-    key = input('masukkan kunci: ')
-    n = int(input('masukkan n: '))
-    decr(msg,key,n)
+# def main():
+#     msg = input('Masukkan pesan plain teks: ')
+#     key = input('masukkan kunci: ')
+#     n = int(input('masukkan n: '))
+#     decr(msg,key,n)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
     

@@ -1,4 +1,6 @@
+from rc4 import decr
 from imagestegano import make_New_Image,decode_Image
+from audiostegano import insertMsg,emitMsg
 from tkinter import *
 from tkinter import filedialog
 import cv2
@@ -87,7 +89,33 @@ def encode(metode,image,filepath,message,key, nama,n):
         plain.pack()
         plain.place(x=400,y=40)
 
+def encode_audio(metode,filepath,message,key,n):
+    global plain,Label1,encrip,Label2
+    n = int(n)
+    if(metode == 1 or metode == 3):
+        isSeq = True
+    else:
+        isSeq = False
+    if metode == 3 or 4:
+        text = encr(message,key,n)
+    else:
+        text = message
+    insertMsg(text,filepath,isSeq)
+    plain.pack_forget()
+    Label1.pack_forget()
+    Label1 = Label(main, text = "Penyisipan text berhasil")
+    Label1.pack()
+    if(metode == 3 or metode == 4):
+        encrip.pack_forget()
+        Label2.pack_forget()
+        Label1 = Label(main, text = "Text telah di encrypht menjadi: ")
+        Label1.pack()
+        Label1.place(x=220,y=40)
+        plain = Label(main, text = text)
+        plain.pack()
+        plain.place(x=400,y=40)
 
+    
 def decode(image,key,n):
         global plain,Label1
         n = int(n)
@@ -100,9 +128,34 @@ def decode(image,key,n):
         plain = Label(main, text = Text)
         plain.pack()
         plain.place(x=300,y=270)
+
+
+def decode_audio(metode,path,key,n):
+        global plain,Label1
+        n = int(n)
+        if metode== 1 or metode == 3:
+            isSeq = True
+        else:
+            isSeq = False
+        value = emitMsg(path,isSeq)
+        print(value)
+        if metode == 3 or metode ==4:
+            text = decr(value,key,n)
+        else:
+            text = value
+        plain.pack_forget()
+        Label1.pack_forget()
+        Label1 = Label(main, text = "Ini Text nya: ")
+        Label1.pack()
+        Label1.place(x=220,y=270)
+        plain = Label(main, text = text)
+        plain.pack()
+        plain.place(x=300,y=270)
     
-button1 = Button(main, text="Run", command=lambda : encode(m.get(),image_content,path_content,entry.get(),entry2.get(),entry3.get(),entry5.get()))
-button2 = Button(main, text="Run", command=lambda : decode(image_content,entry4.get(),entry6.get()))
+button1 = Button(main, text="Run Citra", command=lambda : encode(m.get(),image_content,path_content,entry.get(),entry2.get(),entry3.get(),entry5.get()))
+button3 = Button(main, text="Run Audio", command=lambda : encode_audio(m.get(),path_content,entry.get(),entry2.get(),entry5.get()))
+button2 = Button(main, text="Run Citra", command=lambda : decode(image_content,entry4.get(),entry6.get()))
+button4 = Button(main, text="Run Audio", command=lambda : decode_audio(m.get(),path_content,entry2.get(),entry6.get()))
 
 judul = Label(main,text="Sisipkan Pesan")
 judul.pack
@@ -138,6 +191,8 @@ openFile.pack()
 openFile.place(x=40,y=240)
 button1.pack()
 button1.place(x=40,y=270)
+button3.pack()
+button3.place(x=100,y=270)
 judul2 = Label(main,text="Tampilkan Pesan")
 judul2.pack
 judul2.place(x=40,y=310)
@@ -153,5 +208,8 @@ openFile2.pack()
 openFile2.place(x=40,y=410)
 button2.pack()
 button2.place(x=40,y=440)
+button4.pack()
+button4.place(x=100,y=440)
+
 
 main.mainloop()
