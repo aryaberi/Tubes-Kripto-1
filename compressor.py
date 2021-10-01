@@ -1,12 +1,7 @@
-import PIL
-from PIL import Image
-from tkinter.filedialog import *
+import cv2
 
-file_path = askopenfilename()
-img = PIL.Image.open(file_path)
-_height, _width = img.size
-
-img = img.resize((_height,_width), PIL.Image.ANTIALIAS)
-save_path = asksaveasfilename()
-
-img.save(save_path+'_compressed.jpg')
+def compress(img):
+    _height = int((img.shape[0])/5)
+    _width = int((img.shape[1])/5)
+    img = cv2.resize(img, (_width, _height), interpolation=cv2.INTER_AREA)
+    return img
