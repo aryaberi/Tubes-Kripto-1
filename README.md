@@ -1,4 +1,4 @@
-# Tugas Besar 1 Kripto
+# Tugas Besar 1 Kriptografi
 
 Anggota Kelompok:
 1. 13518068 Wildan Zaim Syaddad
