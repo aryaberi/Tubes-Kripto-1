@@ -5,6 +5,8 @@ from tkinter import *
 from tkinter import filedialog
 import cv2
 from rc4 import encr
+import imghdr
+from compressor import compres
 
 main = Tk()
 main.geometry('500x800+100+200')
@@ -44,11 +46,14 @@ entry6 = Entry(main,width=30)
 def pilihFile():
     global fileLabel,path_content,image_content 
     main.filename = filedialog.askopenfilename(initialdir="/c",title="Pilih file")
+    print(imghdr.what(main.filename))
+    if(imghdr.what(main.filename)=="png"):
+    else: 
+        image = cv2.imread(main.filename)
     fileLabel=Label(main,text=main.filename)
     fileLabel.pack_forget()
     fileLabel.pack()
     fileLabel.place(x=220)
-    image = cv2.imread(main.filename)
     path_content = main.filename
     image_content = image
 
@@ -133,7 +138,7 @@ def decode(image,key,n):
         plain.place(x=300,y=270)
 
 
-def decode_audio(metode,path,key,n):
+def decode_audio(path,key,n):
         global plain,Label1
         if n != "":
             n = int(n)
