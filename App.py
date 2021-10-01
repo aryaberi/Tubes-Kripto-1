@@ -68,7 +68,8 @@ openFile2 = Button(main, text="Pilih File", command=pilihFile2)
 
 def encode(metode,image,filepath,message,key, nama,n):
     global plain,Label1,encrip,Label2
-    n = int(n)
+    if n != "":
+        n = int(n)
     Value = make_New_Image(image,message,filepath,metode,nama,key,n)
     plain.pack_forget()
     Label1.pack_forget()
@@ -91,7 +92,8 @@ def encode(metode,image,filepath,message,key, nama,n):
 
 def encode_audio(metode,filepath,message,key,n):
     global plain,Label1,encrip,Label2
-    n = int(n)
+    if n != "":
+        n = int(n)
     if(metode == 1 or metode == 3):
         isSeq = True
     else:
@@ -118,7 +120,8 @@ def encode_audio(metode,filepath,message,key,n):
     
 def decode(image,key,n):
         global plain,Label1
-        n = int(n)
+        if n != "":
+            n = int(n)
         Text = decode_Image(image,key,n)
         plain.pack_forget()
         Label1.pack_forget()
@@ -132,9 +135,11 @@ def decode(image,key,n):
 
 def decode_audio(metode,path,key,n):
         global plain,Label1
-        n = int(n)
+        if n != "":
+            n = int(n)
+        print(key)
         value = emitMsg(path) 
-        if metode == 3 or metode ==4:
+        if key != "":
             text = decr(value,key,n)
         else:
             text = value
